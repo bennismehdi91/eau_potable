@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: Test_Upload
+    tables:
+    - name: test
+      identifier: test
+      freshness:
+        warn_after: {count: 1, period: day}
+        error_after: {count: 7, period: day}
