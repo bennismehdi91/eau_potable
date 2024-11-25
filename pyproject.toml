@@ -1,0 +1,39 @@
+[tool.poetry]
+# Package metadata
+name = "ProjetLeWagon_EauPotable"
+version = "0.1.0"
+description = "Projet Le Wagon on drinkable water"
+license = ""  # You can replace this with your chosen license
+
+# Authors and maintainers (optional)
+authors = ["Mehdi Bennis <bennismehdi91@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"  # You can specify a compatible Python version range here -> ^ ça veut dire 'Au moins telle version'
+pandas = "^2.2.2"
+ipykernel = "^6.29.4"
+black = "^24.4.2"
+matplotlib = "<3.8.0"
+openpyxl = "^3.1.2"
+python-docx = "^1.1.2"
+requests = "^2.32.2"
+pyarrow = "^16.1.0"
+mypy = "^1.10.1"
+python-pptx = "^1.0.2"
+xlrd = "^2.0.1"
+chardet = "^5.2.0"
+plotly = "5.24.1"
+dash = "^2.18.2"
+ipywidgets = ">=7.5"
+nbformat = ">=4.2.0"
+notebook = ">=5.3"
+scipy = "<=1.14.1"
+seaborn = "^0.13.2"
+streamlit = "^1.40.1"
+scikit-learn = "^1.5.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.core.masonry.builders.sdist"
