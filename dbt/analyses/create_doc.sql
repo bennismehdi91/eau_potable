@@ -1,3 +1,3 @@
 {{ codegen.generate_model_yaml(
-    model_names=['stg_datasources__entite_gestion', ]
+    model_names=['int_mb_clean1_entite_gestion']
 ) }}
