@@ -1,3 +1,3 @@
-{{ codegen.generate_model_yaml(
-    model_names=['']
-) }}
+--{{ codegen.generate_model_yaml(
+--    model_names=['']
+--) }}
