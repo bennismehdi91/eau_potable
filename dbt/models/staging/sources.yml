@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: datasources
     tables:
-    - name: stg_entite_gestion
+    - name: entitegestion_2008_2023
       identifier: entitegestion_2008_2023
       freshness:
         warn_after: {count: 1, period: day}
