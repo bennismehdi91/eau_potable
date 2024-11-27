@@ -31,4 +31,19 @@ data = [dict(row.items()) for row in results]
 # Create a Pandas DataFrame
 results_df = pd.DataFrame(data, columns=columns)
 
-results_df
+import plotly.express as px
+
+fig=px.scatter(data_frame=results_df,
+               x="nb_abonnes",
+               y="prix_ttc_m3",
+               #color="continent",
+               #size="pop", 
+               #size_max=60,
+               range_x=[0,20000],
+               #range_y=[25, 90],
+               #hover_name= "country",
+               animation_frame="year",
+               #title = "Life Expectancy vs GDP per cap over the years"
+               )
+
+fig.show()
