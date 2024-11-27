@@ -46,4 +46,4 @@ fig=px.scatter(data_frame=results_df,
                #title = "Life Expectancy vs GDP per cap over the years"
                )
 
-fig.show()
+st.plotly_chart(fig)
