@@ -31,5 +31,4 @@ data = [dict(row.items()) for row in results]
 # Create a Pandas DataFrame
 results_df = pd.DataFrame(data, columns=columns)
 
-print(results_df)
-
+results_df
