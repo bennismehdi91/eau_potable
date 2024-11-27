@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: int_mb_clean1_entite_gestion
+    description: ""
+    columns:
+      - name: departement
+        data_type: string
+        description: ""
+
+      - name: id_sispea_collectivite
+        data_type: int64
+        description: ""
+
+      - name: nom_collectivite
+        data_type: string
+        description: ""

@@ -1,0 +1,1 @@
+SELECT * FROM {{ ref('int_mb_clean1_entite_gestion') }}
