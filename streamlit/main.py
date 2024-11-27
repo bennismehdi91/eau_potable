@@ -9,7 +9,9 @@ st.markdown('Test test')
 st.header('title')
 
 # Initialize the BigQuery client
-client = bigquery.Client()
+credentials = st.secrets["bigquery"]
+
+client = bigquery.Client.from_service_account_info(credentials)
 
 # Query BigQuery
 query = "SELECT * FROM `eaupotable-442812.dbt_elewagon.mart_mb_correlation_abonnesprice` LIMIT 10"
