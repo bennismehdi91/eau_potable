@@ -1,20 +1,2 @@
-SELECT
-        departement,
-        cluster_pop_entite_gestion,
-        communes_adherentes_entite_de_gestion,
-        mode_de_gestion,
-        pop_entite_de_gestion_sans_double_compte,
-        prix_ttc_m3,
-        tx_conformite_microbiologie,
-        tx_conformite_physiochimiques,
-        indice_lieaire_perte_reseau,
-        tx_moyen_renouvellement_reseau,
-        indice_protection_ressource,
-        nb_abonnes,
-        epargne_brute_annuelle,
-        lineaire_reseau_hors_branchement,
-        densite_lineaire_abonnes,
-        ratio_habitant_par_abonne,
-        consommation_moyenne_par_abonne,
-        year
-FROM {{ ref('int_all_data_with_clusters') }}
+SELECT *
+FROM {{ ref('int_ag_appreciation_IPL') }}
