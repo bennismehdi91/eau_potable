@@ -1,3 +1,7 @@
+{{ config(
+    materialized='table'
+) }}
+
 SELECT *,
 CASE
     -- Auvergne-Rhône-Alpes (12 departments)
