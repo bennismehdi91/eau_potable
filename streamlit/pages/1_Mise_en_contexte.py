@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 from google.cloud import bigquery
-import os
-
 
 
 credentials = st.secrets["bigquery"]
@@ -15,6 +13,10 @@ results = query_job.result()
 columns = [field.name for field in results.schema]
 data = [dict(row.items()) for row in results]
 df = pd.DataFrame(data, columns=columns)
+
+df
+
+"""
 
 # scorecard prix_ttc_m3 
 prix = df['prix_ttc_m3'].mean().round(2)
@@ -37,3 +39,5 @@ formatted_nb_services
 # scorecard lineaire_reseau_km' 
 formatted_lin_reseau = (df['lineaire_reseau_km'] / 1_000).round(0).astype(str).str.replace(".", ",") + "K km"
 formatted_lin_reseau
+
+"""
