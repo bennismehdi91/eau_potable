@@ -32,6 +32,7 @@ seaborn = "^0.13.2"
 streamlit = "^1.40.1"
 scikit-learn = "^1.5.2"
 google-cloud-bigquery = "^3.27.0"
+jupyter = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 
