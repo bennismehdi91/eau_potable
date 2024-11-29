@@ -1,10 +1,16 @@
 import streamlit as st
 import pandas as pd
 from google.cloud import bigquery
+import os
 
+local = True
 
-credentials = st.secrets["bigquery"]
-client = bigquery.Client.from_service_account_info(credentials)
+if local:
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/mehdibennis/projects/lewagon/api_googlebigquery/eaupotable-442812-b1a5289718c4.json"
+    client = bigquery.Client()
+else:
+    credentials = st.secrets["bigquery"]
+    client = bigquery.Client.from_service_account_info(credentials)
 
 ### query to select data and turn it into dataframe
 query = "SELECT * FROM eaupotable-442812.dbt_atorne.marte_at_scorecard_p2"
@@ -14,11 +20,14 @@ columns = [field.name for field in results.schema]
 data = [dict(row.items()) for row in results]
 df = pd.DataFrame(data, columns=columns)
 
+"coucou c'est moi"
+"Ceci est un streamlit"
+
 df
 
 """
 
-# scorecard prix_ttc_m3 
+### scorecard prix_ttc_m3 
 prix = df['prix_ttc_m3'].mean().round(2)
 formatted_prix = formatted_mean = f"{prix :.2f} €"
 formatted_prix

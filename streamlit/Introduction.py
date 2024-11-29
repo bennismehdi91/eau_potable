@@ -1,17 +1,18 @@
 import streamlit as st
-from google.cloud import bigquery
 import pandas as pd
+from google.cloud import bigquery
+import os
 
-st.markdown('Test test')
+local = True
 
-"test test"
+if local:
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/mehdibennis/projects/lewagon/api_googlebigquery/eaupotable-442812-b1a5289718c4.json"
+    client = bigquery.Client()
+else:
+    credentials = st.secrets["bigquery"]
+    client = bigquery.Client.from_service_account_info(credentials)
 
-st.header('title')
-
-# Initialize the BigQuery client
-credentials = st.secrets["bigquery"]
-
-client = bigquery.Client.from_service_account_info(credentials)
+st.header('Test title')
 
 query = "SELECT * FROM eaupotable-442812.dbt_elewagon.mart_mb_indicateur_quality_aggregated"
 query_job = client.query(query)
