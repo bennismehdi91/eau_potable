@@ -25,6 +25,8 @@ data = [dict(row.items()) for row in results]
 
 results_df = pd.DataFrame(data, columns=columns)
 
+results_df
+
 import plotly.express as px
 
 fig = px.line(
