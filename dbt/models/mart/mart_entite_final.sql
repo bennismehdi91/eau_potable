@@ -1,0 +1,1 @@
+SELECT * FROM {{ ref('int_final_entite_with_cluster_3') }}
