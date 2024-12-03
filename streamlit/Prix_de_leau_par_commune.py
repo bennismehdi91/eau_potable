@@ -16,7 +16,8 @@ st.header("Prix de l'eau - Suivi de votre commune")
 # Input search bar
 query = st.text_input("Rechercher votre une commune (nom et/ou code postal)")
 
-cities = pd.read_csv("./files/code_cities.csv", sep=";")
+file_path = os.path.join(os.path.dirname(__file__), "files/code_cities.csv")
+cities = pd.read_csv(file_path, sep=";")
 
 # List of options
 options = list(cities["nom_commune_zip"])
