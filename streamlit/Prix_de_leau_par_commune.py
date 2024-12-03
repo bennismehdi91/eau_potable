@@ -10,6 +10,7 @@ client = bigquery.Client.from_service_account_info(credentials)
 
 ### quey to select data and turn it into dataframe
 
+code_insee = 31555
 
 st.header("Prix de l'eau - Suivi de votre commune")
 
