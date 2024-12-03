@@ -80,8 +80,8 @@ st.subheader("Scorecard")
 df_2022 = df[df["year"] == 2022]
 
 ##### Prix
-prix = df_2022["prix_ttc_m3"].mean().round(2)
-formatted_prix = formatted_mean = f"{prix :.2f} €"
+prix = int(df_2022["prix_ttc_m3"].mean())
+formatted_prix = formatted_mean = f"{prix} €"
 
 ##### Nb Abos
 nb_abo = int(df_2022["nb_abonnes"].min())
