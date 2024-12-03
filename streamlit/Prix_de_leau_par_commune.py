@@ -49,7 +49,7 @@ code_insee = cities["code_insee_commune_adherente"].iloc[0]
 # Query BigQuery
 query = f"""
 SELECT * 
-FROM `eaupotable-442812.dbt_elewagon.mart_cities_final` 
+FROM `eaupotable-442812.dbt_elewagon.mart_cities_aggregated_MB` 
 WHERE code_insee_commune_adherente = '{code_insee}'
 """
 try:
