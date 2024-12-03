@@ -4,16 +4,9 @@ from google.cloud import bigquery
 import os
 import plotly.express as px
 
-local = True
 
-if local:
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-        "/home/mehdibennis/projects/lewagon/api_googlebigquery/eaupotable-442812-b1a5289718c4.json"
-    )
-    client = bigquery.Client()
-else:
-    credentials = st.secrets["bigquery"]
-    client = bigquery.Client.from_service_account_info(credentials)
+credentials = st.secrets["bigquery"]
+client = bigquery.Client.from_service_account_info(credentials)
 
 ### query to select data and turn it into dataframe
 query = "SELECT * FROM eaupotable-442812.dbt_atorne.marte_at_scorecard_p2"
