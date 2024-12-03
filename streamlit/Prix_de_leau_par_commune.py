@@ -9,12 +9,14 @@ credentials = st.secrets["bigquery"]
 client = bigquery.Client.from_service_account_info(credentials)
 
 ### query to select data and turn it into dataframe
-query = "SELECT * FROM eaupotable-442812.dbt_atorne.marte_at_scorecard_p2"
+query = "SELECT * FROM eaupotable-442812.dbt_elewagon.mart_cities_final"
 query_job = client.query(query)
 results = query_job.result()
 columns = [field.name for field in results.schema]
 data = [dict(row.items()) for row in results]
 df = pd.DataFrame(data, columns=columns)
+
+df
 
 st.header("Mise en contexte")
 st.subheader("Scorecard")
