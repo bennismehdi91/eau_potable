@@ -8,20 +8,57 @@ import plotly.express as px
 credentials = st.secrets["bigquery"]
 client = bigquery.Client.from_service_account_info(credentials)
 
-### query to select data and turn it into dataframe
-query = "SELECT * FROM eaupotable-442812.dbt_elewagon.mart_cities_final"
+### quey to select data and turn it into dataframe
+
+
+st.header("Prix de l'eau - Suivi de votre commune")
+
+# Input search bar
+query = st.text_input("Rechercher votre une commune (nom et/ou code postal)")
+
+cities = pd.read_csv("./files/code_cities.csv", sep=";")
+
+# List of options
+options = list(cities["nom_commune_zip"])
+
+# Filter the list based on the query
+if query:
+    filtered_options = [option for option in options if query.lower() in option.lower()]
+else:
+    filtered_options = options
+
+if len(filtered_options) > 1:
+    # Display the filtered options as a selectable menu
+    selected_option = st.selectbox("Préciser la localisation :", filtered_options)
+else:
+    selected_option = filtered_options[0]
+
+cities = cities[cities["nom_commune_zip"] == selected_option]
+code_insee = cities["code_insee_commune_adherente"].iloc[0]
+
+query = f"SELECT * FROM eaupotable-442812.dbt_elewagon.mart_cities_final WHERE code_insee_commune_adherente = {code_insee}"
 query_job = client.query(query)
 results = query_job.result()
 columns = [field.name for field in results.schema]
 data = [dict(row.items()) for row in results]
 df = pd.DataFrame(data, columns=columns)
 
-df
 
-st.header("Mise en contexte")
 st.subheader("Scorecard")
 
 ### Metrics pour la scorecard 2022
+
+###
+# nom_entite_de_gestion
+# année = year
+# Mode de gestion = mode_de_gestion
+# Prix TTC m3 en 2022 = prix_ttc_m3
+# tx_conformite_microbiologie
+# tx_conformite_physiochimiques
+# ipl_note
+# Nombre d'abonne = nb_abonnes
+# conso moyenne par abonne = consommation_moyenne_par_abonne
+# lineaire_reseau_hors_branchement
 
 ##### Prix
 prix = df["prix_ttc_m3"].mean().round(2)
@@ -32,17 +69,14 @@ nb_abo = df["nb_abonnes"].min() / 1000000
 nb_abo2 = nb_abo.round(1)
 
 ##### Conso moyenne
-mean_conso = int(df.loc[0, "conso_moy_foyer"])
+mean_conso = int(df.loc[0, "consommation_moyenne_par_abonne"])
 formatted_mean = f"{mean_conso} m³"
 
 ##### Facture moyenne
 facture_moyenne = int((prix * mean_conso))
 
-##### Nb services
-formatted_nb_services = df.loc[0, "nb_services"] / 1000
-
 ##### Linéaire réseau
-formatted_lin_reseau = df.loc[0, "lineaire_reseau_km"] / 1000
+formatted_lin_reseau = df.loc[0, "lineaire_reseau_hors_branchement"] / 1000
 
 st.markdown(
     """
@@ -95,7 +129,7 @@ with col3:
         unsafe_allow_html=True,
     )
 st.text("")
-col1, col2, col3 = st.columns([1, 1, 1], vertical_alignment="center")
+col1, col2 = st.columns([1, 1], vertical_alignment="center")
 with col1:
 
     # Display your metric with custom styling
@@ -119,18 +153,6 @@ with col2:
         """,
         unsafe_allow_html=True,
     )
-with col3:
-    # Display your metric with custom styling
-    st.markdown(
-        f"""
-        <div class="custom-metric">
-            Nombre de services<br><br>
-            <span style="{style_scorecard}">{formatted_nb_services}</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
 
 query = "SELECT * FROM `eaupotable-442812.dbt_agonternew.mart_ag_evol_prix_qualite_sans_cluster`"
 query_job = client.query(query)
