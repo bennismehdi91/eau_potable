@@ -1,34 +1,57 @@
-{{ config(
-    materialized='table'
-) }}
+{{ config(materialized="table") }}
 
-WITH base AS (
-    SELECT
-        year,
-        departement_name,
-        COUNT(mode_de_gestion) AS total_mode_gestion,
-        CONCAT(year, departement_name) AS key_dpt
-    FROM {{ ref("int_at_region_departement") }}
-    WHERE mode_de_gestion IS NOT NULL
-    GROUP BY year, departement_name, CONCAT(year, departement_name)
-)
+with
+    base as (
+        select
+            year,
+            departement_name,
+            count(mode_de_gestion) as total_mode_gestion,
+            concat(year, departement_name) as key_dpt
+        from {{ ref("int_at_region_departement") }}
+        where mode_de_gestion is not null
+        group by year, departement_name, concat(year, departement_name)
+    )
 
-SELECT
+select
     reg.year,
     reg.departement_name,
-    CONCAT(reg.year, reg.departement_name) AS key_dpt,
+    concat(reg.year, reg.departement_name) as key_dpt,
     reg.mode_de_gestion,
-    COUNT(reg.mode_de_gestion) AS split_mode_gestion,
+    count(reg.mode_de_gestion) as split_mode_gestion,
     b.total_mode_gestion,
-    ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0) AS percentage,
-    CASE 
-        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>75) THEN 75
-        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>50) THEN 50
-        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>25) THEN 25
-        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>0) THEN 0
-    END AS taux_interco 
-FROM {{ ref("int_at_region_departement") }} reg
-LEFT JOIN base b ON b.key_dpt = CONCAT(reg.year, reg.departement_name)
-WHERE mode_de_gestion IS NOT NULL 
-GROUP BY year, departement_name, mode_de_gestion, total_mode_gestion
-ORDER BY departement_name, year
+    round(((count(reg.mode_de_gestion) / b.total_mode_gestion) * 100), 0) as percentage,
+    lag(round((count(reg.mode_de_gestion) * 100.0 / b.total_mode_gestion), 0)) over (
+        partition by reg.departement_name, reg.mode_de_gestion order by reg.year
+    ) as prev_percentage,
+    round(
+        (
+            (
+                round((count(reg.mode_de_gestion) * 100.0 / b.total_mode_gestion), 0)
+                - lag(
+                    round(
+                        (count(reg.mode_de_gestion) * 100.0 / b.total_mode_gestion), 0
+                    )
+                ) over (
+                    partition by reg.departement_name, reg.mode_de_gestion
+                    order by reg.year
+                )
+            ) / nullif(
+                lag(
+                    round(
+                        (count(reg.mode_de_gestion) * 100.0 / b.total_mode_gestion), 0
+                    )
+                ) over (
+                    partition by reg.departement_name, reg.mode_de_gestion
+                    order by reg.year
+                ),
+                0
+            )
+        )
+        * 100,
+        2
+    ) as percentage_change
+from {{ ref("int_at_region_departement") }} reg
+left join base b on b.key_dpt = concat(reg.year, reg.departement_name)
+where mode_de_gestion is not null
+group by year, departement_name, mode_de_gestion, total_mode_gestion
+order by departement_name, year
