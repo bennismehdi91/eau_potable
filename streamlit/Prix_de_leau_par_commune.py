@@ -93,7 +93,7 @@ formatted_mean = f"{mean_conso} m³"
 facture_moyenne = int((prix * mean_conso))
 
 ##### Linéaire réseau
-formatted_lin_reseau = df.loc[0, "lineaire_reseau_hors_branchement"] / 1000
+formatted_lin_reseau = df.loc[0, "lineaire_reseau_hors_branchement"]
 
 st.markdown(
     """
@@ -164,7 +164,7 @@ with col2:
     st.markdown(
         f"""
         <div class="custom-metric">
-            Linéaire réseau <br>(en milliers de kms)<br> 
+            Linéaire réseau <br><br> 
             <span style="{style_scorecard}">{formatted_lin_reseau}</span><br>
         </div>
         """,
