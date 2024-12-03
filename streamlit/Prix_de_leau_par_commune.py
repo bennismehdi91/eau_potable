@@ -171,30 +171,17 @@ with col2:
         unsafe_allow_html=True,
     )
 
-query = "SELECT * FROM `eaupotable-442812.dbt_agonternew.mart_ag_evol_prix_qualite_sans_cluster`"
-query_job = client.query(query)
-results = query_job.result()
-columns = [field.name for field in results.schema]
-data = [dict(row.items()) for row in results]
-df2 = pd.DataFrame(data, columns=columns)
-
-### le retravail du prix df
-df2["formatted_price"] = df2["moy_prix_ttc_m3"].apply(lambda x: f"{x:.2f} €")
 
 st.divider()
 # Create bar
-fig = px.bar(
-    df2,
-    x="year",
-    y="moy_prix_ttc_m3",
-    title="Evolution du prix de l'eau",
-    text="formatted_price",
-)
 
+st.subheader("Evolution du Prix")
+
+fig1 = px.line(df, x="moy_prix_ttc_m3", y="year")
 
 # fi2.update
-fig.update_layout(
-    yaxis_range=[1.7, 2.5],
+fig1.update_layout(
+    # yaxis_range=[1.7, 5],
     yaxis_title="Prix TTC (€ / m³)",
     xaxis_title="Année",
     # plot_bgcolor="white",
@@ -202,36 +189,36 @@ fig.update_layout(
     xaxis=dict(showgrid=False),
     yaxis=dict(showgrid=False),
 )
-st.plotly_chart(fig)
+st.plotly_chart(fig1)
 
-#####################################################
+# #####################################################
 
-query = "SELECT * FROM `eaupotable-442812.dbt_agonternew.mart_ag_group_by_dpt_for_map`"
-query_job = client.query(query)
-results = query_job.result()
-columns = [field.name for field in results.schema]
-data = [dict(row.items()) for row in results]
-df3 = pd.DataFrame(data, columns=columns).sort_values(by="year")
+# query = "SELECT * FROM `eaupotable-442812.dbt_agonternew.mart_ag_group_by_dpt_for_map`"
+# query_job = client.query(query)
+# results = query_job.result()
+# columns = [field.name for field in results.schema]
+# data = [dict(row.items()) for row in results]
+# df3 = pd.DataFrame(data, columns=columns).sort_values(by="year")
 
 
-# Step 2: Load GeoJSON file for French departments
-geojson_url = "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements.geojson"
+# # Step 2: Load GeoJSON file for French departments
+# geojson_url = "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements.geojson"
 
-# Create the animated choropleth map
-fig2 = px.choropleth(
-    df3,
-    geojson=geojson_url,  # GeoJSON data
-    locations="departement",  # Column in DataFrame linking to GeoJSON properties
-    featureidkey="properties.code",  # Key in GeoJSON properties for regions
-    color="moy_prix_ttc_m3",  # Column to colorize
-    animation_frame="year",  # Column defining animation frames (e.g., years)
-    color_continuous_scale="balance",  # Color scale
-    title="Evolution du prix en France",
-    range_color=[0, 4],  # Dynamic fixed range
-)
+# # Create the animated choropleth map
+# fig2 = px.choropleth(
+#     df3,
+#     geojson=geojson_url,  # GeoJSON data
+#     locations="departement",  # Column in DataFrame linking to GeoJSON properties
+#     featureidkey="properties.code",  # Key in GeoJSON properties for regions
+#     color="moy_prix_ttc_m3",  # Column to colorize
+#     animation_frame="year",  # Column defining animation frames (e.g., years)
+#     color_continuous_scale="balance",  # Color scale
+#     title="Evolution du prix en France",
+#     range_color=[0, 4],  # Dynamic fixed range
+# )
 
-# Update layout for better visuals
-fig2.update_geos(fitbounds="locations", visible=False)
+# # Update layout for better visuals
+# fig2.update_geos(fitbounds="locations", visible=False)
 
-# Show the map
-st.plotly_chart(fig2)
+# # Show the map
+# st.plotly_chart(fig2)
