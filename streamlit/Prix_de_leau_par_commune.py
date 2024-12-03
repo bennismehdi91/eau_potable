@@ -77,15 +77,17 @@ st.subheader("Scorecard")
 # conso moyenne par abonne = consommation_moyenne_par_abonne
 # lineaire_reseau_hors_branchement
 
+df_2022 = df[df["year"] == 2022]
+
 ##### Prix
-prix = df["prix_ttc_m3"].mean().round(2)
+prix = df_2022["prix_ttc_m3"].mean().round(2)
 formatted_prix = formatted_mean = f"{prix :.2f} €"
 
 ##### Nb Abos
-nb_abo = int(df["nb_abonnes"].min())
+nb_abo = int(df_2022["nb_abonnes"].min())
 
 ##### Conso moyenne
-mean_conso = int(df.loc[0, "consommation_moyenne_par_abonne"])
+mean_conso = int(df_2022.loc[0, "consommation_moyenne_par_abonne"])
 formatted_mean = f"{mean_conso} m³"
 
 ##### Facture moyenne
