@@ -177,6 +177,8 @@ st.divider()
 
 st.subheader("Evolution du Prix")
 
+df
+
 fig1 = px.line(df, x="year", y="moy_prix_ttc_m3")
 
 # fi2.update
