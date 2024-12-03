@@ -29,22 +29,41 @@ if query:
 else:
     filtered_options = options
 
+# Ensure there's at least one matching option
+if not filtered_options:
+    st.error("Aucune commune correspondante. Veuillez affiner votre recherche.")
+    st.stop()
+
+# Handle single or multiple options
 if len(filtered_options) > 1:
-    # Display the filtered options as a selectable menu
     selected_option = st.selectbox("Préciser la localisation :", filtered_options)
 else:
     selected_option = filtered_options[0]
 
+# Filter cities and get the INSEE code
 cities = cities[cities["nom_commune_zip"] == selected_option]
+if cities.empty:
+    st.error("Erreur : aucune commune correspondante.")
+    st.stop()
+
 code_insee = cities["code_insee_commune_adherente"].iloc[0]
 
-query = f"SELECT * FROM eaupotable-442812.dbt_elewagon.mart_cities_final WHERE code_insee_commune_adherente = {code_insee}"
-query_job = client.query(query)
-results = query_job.result()
-columns = [field.name for field in results.schema]
-data = [dict(row.items()) for row in results]
-df = pd.DataFrame(data, columns=columns)
-
+# Query BigQuery
+query = f"""
+SELECT * 
+FROM `eaupotable-442812.dbt_elewagon.mart_cities_final` 
+WHERE code_insee_commune_adherente = '{code_insee}'
+"""
+st.write("Generated Query:", query)  # Debugging
+try:
+    query_job = client.query(query)
+    results = query_job.result()
+    columns = [field.name for field in results.schema]
+    data = [dict(row.items()) for row in results]
+    df = pd.DataFrame(data, columns=columns)
+except Exception as e:
+    st.error(f"BigQuery Error: {str(e)}")
+    st.stop()
 
 st.subheader("Scorecard")
 
