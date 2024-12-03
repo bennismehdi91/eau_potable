@@ -20,7 +20,13 @@ SELECT
     reg.mode_de_gestion,
     COUNT(reg.mode_de_gestion) AS split_mode_gestion,
     b.total_mode_gestion,
-    ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0) AS percentage
+    ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0) AS percentage,
+    CASE 
+        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>75) THEN 75
+        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>50) THEN 50
+        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>25) THEN 25
+        WHEN(ROUND(((COUNT(reg.mode_de_gestion) /b.total_mode_gestion)*100),0)>0) THEN 0
+    END AS taux_interco 
 FROM {{ ref("int_at_region_departement") }} reg
 LEFT JOIN base b ON b.key_dpt = CONCAT(reg.year, reg.departement_name)
 WHERE mode_de_gestion IS NOT NULL 
