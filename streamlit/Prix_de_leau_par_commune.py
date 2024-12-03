@@ -8,9 +8,7 @@ import plotly.express as px
 credentials = st.secrets["bigquery"]
 client = bigquery.Client.from_service_account_info(credentials)
 
-### quey to select data and turn it into dataframe
-
-code_insee = 31555
+### query to select data and turn it into dataframe
 
 st.header("Prix de l'eau - Suivi de votre commune")
 
@@ -54,7 +52,6 @@ SELECT *
 FROM `eaupotable-442812.dbt_elewagon.mart_cities_final` 
 WHERE code_insee_commune_adherente = '{code_insee}'
 """
-st.write("Generated Query:", query)  # Debugging
 try:
     query_job = client.query(query)
     results = query_job.result()
@@ -86,8 +83,7 @@ prix = df["prix_ttc_m3"].mean().round(2)
 formatted_prix = formatted_mean = f"{prix :.2f} €"
 
 ##### Nb Abos
-nb_abo = df["nb_abonnes"].min() / 1000000
-nb_abo2 = nb_abo.round(1)
+nb_abo = int(df["nb_abonnes"].min())
 
 ##### Conso moyenne
 mean_conso = int(df.loc[0, "consommation_moyenne_par_abonne"])
@@ -122,8 +118,8 @@ with col1:
     st.markdown(
         f"""
         <div class="custom-metric">
-            Nombre d'abonnés <br>(en millions)<br> 
-            <span style="{style_scorecard}">{nb_abo2}</span><br>
+            Nombre d'abonnés <br><br> 
+            <span style="{style_scorecard}">{nb_abo}</span><br>
         </div>
         """,
         unsafe_allow_html=True,
