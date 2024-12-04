@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from google.cloud import bigquery
 import os
 import plotly.express as px
 import plotly.graph_objects as go
-
 
 local = False
 
@@ -34,12 +34,14 @@ options = list(cities["nom_commune_zip"])
 if query:
     filtered_options = [option for option in options if query.lower() in option.lower()]
 else:
-    filtered_options = options
+    filtered_options = [options[15566]]
 
 # Ensure there's at least one matching option
 if not filtered_options:
     st.error("Aucune commune correspondante. Veuillez affiner votre recherche.")
     st.stop()
+
+filtered_options.sort()
 
 # Handle single or multiple options
 if len(filtered_options) > 1:
@@ -85,22 +87,52 @@ except Exception as e:
 # conso moyenne par abonne = consommation_moyenne_par_abonne
 # lineaire_reseau_hors_branchement
 
+name = cities["nom_commune_adherente"].iloc[0]
 
-st.subheader("Scorecard en 2022")
-
+st.subheader(f"Scorecard en 2022 : {name}")
 
 df_2022 = df[df["year"] == 2022]
 
 if df_2022.empty:
-    f"Pas de données en 2022 pour {selected_option}"
+    "Données 2022 non déclarées par la commune"
 else:
-    prix = df_2022["prix_ttc_m3"].mean()
-    abonnes = int(df_2022["nb_abonnes"].mean())
-    conso_moyenne = int(df_2022["consommation_moyenne_par_abonne"].mean())
-    facture_moyenne = int((prix * conso_moyenne))
-    lineaire = int(df_2022["lineaire_reseau_hors_branchement"].mean())
-    nom_entite = df_2022["nom_entite_de_gestion"].max()
-    mode_de_gestion = df_2022["mode_de_gestion"].max()
+    prix = (
+        df_2022["prix_ttc_m3"].mean()
+        if not np.isnan(df_2022["prix_ttc_m3"].mean())
+        else 0
+    )
+    abonnes = (
+        int(df_2022["nb_abonnes"].mean())
+        if not np.isnan(df_2022["nb_abonnes"].mean())
+        else 0
+    )
+    conso_moyenne = (
+        int(df_2022["consommation_moyenne_par_abonne"].mean())
+        if not np.isnan(df_2022["consommation_moyenne_par_abonne"].mean())
+        else 0
+    )
+    facture_moyenne = (
+        int((prix * conso_moyenne)) if not np.isnan(prix * conso_moyenne) else 0
+    )
+    lineaire = (
+        int(df_2022["lineaire_reseau_hors_branchement"].mean())
+        if not np.isnan(df_2022["lineaire_reseau_hors_branchement"].mean())
+        else 0
+    )
+    nom_entite = (
+        df_2022["nom_entite_de_gestion"].max()
+        if df_2022["nom_entite_de_gestion"].notna().any()
+        else "Information non déclarée"
+    )
+    mode_de_gestion = (
+        df_2022["mode_de_gestion"].max()
+        if df_2022["mode_de_gestion"].notna().any()
+        else "Information non déclarée"
+    )
+
+    info_missing = (
+        f"<span style='font-weight: bold; color: #5C7FCA'> Information manquante</span>"
+    )
 
     st.markdown(
         """
@@ -132,63 +164,112 @@ else:
             unsafe_allow_html=True,
         )
     with col2:
-
-        # Display your metric with custom styling
-        st.markdown(
-            f"""
-            <div class="custom-metric">
-                Nombre d'abonnés <br><br> 
-                <span style="{style_scorecard}">{abonnes}</span><br>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        if abonnes != 0:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Nombre d'abonnés <br><br> 
+                    <span style="{style_scorecard}">{abonnes}</span><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Nombre d'abonnés <br><br> 
+                   {info_missing}<br><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
     with col3:
-        # Display your metric with custom styling
-        st.markdown(
-            f"""
-            <div class="custom-metric">
-                Prix ttc m3<br><br>
-                <span style="{style_scorecard}">{prix} €</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        if prix != 0:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Prix ttc m3<br><br>
+                    <span style="{style_scorecard}">{prix} €</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Prix ttc m3 <br><br> 
+                   {info_missing}<br><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
     st.text("")
     col1, col2, col3 = st.columns([1, 1, 1], vertical_alignment="center")
     with col1:
-        # Display your metric with custom styling
-        st.markdown(
-            f"""
-            <div class="custom-metric">
-                Consommation moyenne par foyer<br> <span style="{style_scorecard}">{conso_moyenne}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        if conso_moyenne != 0:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Consommation moyenne par foyer<br> <span style="{style_scorecard}">{conso_moyenne}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Consommation moyenne par foyer<br> 
+                   {info_missing}<br><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
     with col2:
 
-        # Display your metric with custom styling
-        st.markdown(
-            f"""
-            <div class="custom-metric">
-                Facture moyenne <br>annuelle <br> 
-                <span style="{style_scorecard}">{facture_moyenne} €</span><br>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        if facture_moyenne != 0:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Facture moyenne <br>annuelle <br> 
+                    <span style="{style_scorecard}">{facture_moyenne} €</span><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Facture moyenne <br>annuelle<br> 
+                   {info_missing}<br><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
     with col3:
-        # Display your metric with custom styling
-        st.markdown(
-            f"""
-            <div class="custom-metric">
-                Linéaire réseau <br><br> 
-                <span style="{style_scorecard}">{lineaire} kms</span><br>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        if lineaire != 0:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Linéaire réseau <br><br> 
+                    <span style="{style_scorecard}">{lineaire} kms</span><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f"""
+                <div class="custom-metric">
+                    Linéaire réseau<br><br> 
+                   {info_missing}<br><br>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     st.divider()
     # Create bar
@@ -258,23 +339,30 @@ else:
         )
     )
 
+    min_micro = tcd["tx_conformite_microbiologie"].min()
+    min_physio = tcd["tx_conformite_physiochimiques"].min()
+    if min_micro < min_physio:
+        min_scale = min_micro - 5
+    else:
+        min_scale = min_physio - 5
+
     # Define y-axes
     fig2.update_layout(
         title="Microbiologie vs Physiochimiques",
         xaxis=dict(title="Années"),
         yaxis=dict(
-            title="Microbiologie",
-            titlefont=dict(color="blue"),
-            tickfont=dict(color="blue"),
-            range=[tcd["tx_conformite_physiochimiques"].min() - 3, 100],
+            title="Microbiologie & Physiochimiques",
+            # titlefont=dict(color="blue"),
+            # tickfont=dict(color="blue"),
+            range=[min_scale, 102],
         ),
         yaxis2=dict(
-            title="Physiochimiques",
-            titlefont=dict(color="green"),
-            tickfont=dict(color="green"),
-            range=[tcd["tx_conformite_microbiologie"].min() - 3, 100],
+            # title="Physiochimiques",
+            # titlefont=dict(color="green"),
+            # tickfont=dict(color="green"),
+            range=[min_scale, 102],
             overlaying="y",
-            side="right",
+            # side="right",
         ),
     )
 
