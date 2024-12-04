@@ -11,6 +11,11 @@ credentials = st.secrets["bigquery"]
 client = bigquery.Client.from_service_account_info(credentials)
 
 ### query to select data and turn it into dataframe
+image = os.path.join(os.path.dirname(__file__), "files/logo.png")
+
+col1, col2, col3 = st.columns([1, 1, 1], vertical_alignment="center")
+with col2:
+    st.image(image)
 
 st.header("Prix de l'eau - Suivi de votre commune")
 
@@ -33,8 +38,6 @@ else:
 if not filtered_options:
     st.error("Aucune commune correspondante. Veuillez affiner votre recherche.")
     st.stop()
-
-filtered_options.sort()
 
 # Handle single or multiple options
 if len(filtered_options) > 1:
@@ -67,18 +70,6 @@ except Exception as e:
 
 
 ### Metrics pour la scorecard 2022
-
-###
-# nom_entite_de_gestion
-# année = year
-# Mode de gestion = mode_de_gestion
-# Prix TTC m3 en 2022 = prix_ttc_m3
-# tx_conformite_microbiologie
-# tx_conformite_physiochimiques
-# ipl_note
-# Nombre d'abonne = nb_abonnes
-# conso moyenne par abonne = consommation_moyenne_par_abonne
-# lineaire_reseau_hors_branchement
 
 name = cities["nom_commune_adherente"].iloc[0]
 
@@ -123,26 +114,25 @@ else:
         else "Information non déclarée"
     )
 
-    info_missing = (
-        f"<span style='font-weight: bold; color: #5C7FCA'> Information manquante</span>"
-    )
-
     st.markdown(
         """
         <style>
         .custom-metric {
-            background-color: rgba(211, 211, 211, 0.30); /* Light blue background with 20% opacity */
-            padding: 10px; /* Add some padding */
-            border-radius: 5px; /* Rounded corners */
-            text-align: center; /* Center align text */
+            background-color: rgba(211, 211, 211, 0.30);
+            padding: 10px; 
+            border-radius: 5px; 
+            text-align: center;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    style_scorecard = "font-size: 40px; font-weight: bold; color: #5C7FCA"
+    style_scorecard = "font-size: 40px; font-weight: bold; color: #0072F0"
 
+    info_missing = (
+        "<span style='font-weight: bold; color: #0072F0'> Information manquante</span>"
+    )
     col1, col2, col3 = st.columns([1, 1, 1], vertical_alignment="center")
     with col1:
 
@@ -150,8 +140,8 @@ else:
         st.markdown(
             f"""
             <div class="custom-metric">
-                Nom de l'entité de gestion : <span style="font-weight:bold;color: #5C7FCA ">{nom_entite}</span><br><br>
-                Type de gestion : <span style="font-weight:bold;color: #5C7FCA ">{mode_de_gestion}</span>
+                Nom de l'entité de gestion : <span style="font-weight:bold;color: #0072F0 ">{nom_entite}</span><br><br>
+                Mode de gestion : <span style="font-weight:bold;color: #0072F0 ">{mode_de_gestion}</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -264,8 +254,8 @@ else:
                 unsafe_allow_html=True,
             )
 
-    st.divider()
-    # Create bar
+
+st.divider()
 
 st.subheader("Evolution du Prix")
 
@@ -283,23 +273,20 @@ tcd = pd.pivot_table(
 
 tcd["prix_ttc_m3"] = tcd["prix_ttc_m3"].round(2)
 
-if tcd.empty:
+if df.empty:
     f"Pas de données pour {selected_option}"
 else:
-
     fig1 = px.line(
         tcd,
         x="year",
         y="prix_ttc_m3",
         text="prix_ttc_m3",
     )
-    fig1.update_traces(textposition="top center")
+    fig1.update_traces(textposition="top center", line=dict(color="#0072F0"))
     fig1.update_layout(
         yaxis_range=[tcd["prix_ttc_m3"].min() - 0.5, tcd["prix_ttc_m3"].max() + 0.5],
         yaxis_title="Prix TTC (€ / m³)",
         xaxis_title="Année",
-        # plot_bgcolor="white",
-        # paper_bgcolor="white",
         xaxis=dict(showgrid=False),
         yaxis=dict(showgrid=False),
     )
@@ -317,7 +304,7 @@ else:
             y=tcd["tx_conformite_microbiologie"],
             name="Microbiologie",
             yaxis="y1",
-            line=dict(color="blue"),
+            line=dict(color="#0072F0"),
         )
     )
 
@@ -328,7 +315,7 @@ else:
             y=tcd["tx_conformite_physiochimiques"],
             name="Physiochimiques",
             yaxis="y2",
-            line=dict(color="green"),
+            line=dict(color="#F06292"),
         )
     )
 
@@ -345,17 +332,11 @@ else:
         xaxis=dict(title="Années"),
         yaxis=dict(
             title="Microbiologie & Physiochimiques",
-            # titlefont=dict(color="blue"),
-            # tickfont=dict(color="blue"),
             range=[min_scale, 102],
         ),
         yaxis2=dict(
-            # title="Physiochimiques",
-            # titlefont=dict(color="green"),
-            # tickfont=dict(color="green"),
             range=[min_scale, 102],
             overlaying="y",
-            # side="right",
         ),
     )
 
@@ -366,14 +347,14 @@ else:
         x="year",
         y="ipl_note",
         title="Indice de Perte Linéaire",
+        text="ipl_note",
     )
-    fig3.update_traces(textposition="top center")
+
+    fig3.update_traces(textposition="top center", line=dict(color="#0072F0"))
     fig3.update_layout(
         yaxis_range=[tcd["ipl_note"].min() - 0.5, tcd["ipl_note"].max() + 0.5],
         yaxis_title="Indice de Perte Linéaire (fuites)",
         xaxis_title="Année",
-        # plot_bgcolor="white",
-        # paper_bgcolor="white",
         xaxis=dict(showgrid=False),
         yaxis=dict(showgrid=False),
     )
