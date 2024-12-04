@@ -6,26 +6,21 @@ import os
 import plotly.express as px
 import plotly.graph_objects as go
 
-local = False
 
-if local:
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-        "/home/mehdibennis/projects/lewagon/api_googlebigquery/eaupotable-442812-b1a5289718c4.json"
-    )
-    client = bigquery.Client()
-else:
-    credentials = st.secrets["bigquery"]
-    client = bigquery.Client.from_service_account_info(credentials)
+credentials = st.secrets["bigquery"]
+client = bigquery.Client.from_service_account_info(credentials)
 
 ### query to select data and turn it into dataframe
 
 st.header("Prix de l'eau - Suivi de votre commune")
 
-# Input search bar
-query = st.text_input("Rechercher votre une commune (nom et/ou code postal)")
-
 file_path = os.path.join(os.path.dirname(__file__), "files/code_cities.csv")
 cities = pd.read_csv(file_path, sep=";")
+
+file_path
+
+# Input search bar
+query = st.text_input("Rechercher votre une commune (nom et/ou code postal)")
 
 # List of options
 options = list(cities["nom_commune_zip"])
