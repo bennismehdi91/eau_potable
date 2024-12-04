@@ -136,45 +136,57 @@ else:
         else "Information non déclarée"
     )
 
+    style_scorecard = "font-size: 40px; font-weight: bold; color: #0072F0"
+
+    info_missing = (
+        "<span style='font-weight: bold; color: #0072F0'> Information manquante</span>"
+    )
+    # Custom CSS to add padding between rows
+
     st.markdown(
         """
         <style>
         .custom-metric {
-            background-color: rgba(211, 211, 211, 0.30);
-            padding: 10px; 
-            border-radius: 5px; 
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            margin: 10px 0;
+
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    style_scorecard = "font-size: 40px; font-weight: bold; color: #0072F0"
-
-    info_missing = (
-        "<span style='font-weight: bold; color: #0072F0'> Information manquante</span>"
-    )
-    col1, col2, col3 = st.columns([1, 1, 1], vertical_alignment="center")
+    # First row
+    col1, col2, col3 = st.columns([1, 1, 1], vertical_alignment="center", gap="small")
     with col1:
-
-        # Display your metric with custom styling
         st.markdown(
             f"""
-            <div class="custom-metric">
-                Nom de l'entité de gestion : <span style="font-weight:bold;color: #0072F0 ">{nom_entite}</span><br><br>
-                Mode de gestion : <span style="font-weight:bold;color: #0072F0 ">{mode_de_gestion}</span>
+            <div class="custom-metric" style="padding-bottom: 10px">
+                Nom de l'entité de gestion&nbsp;: <span style="font-weight:bold;color: #0072F0">{nom_entite}</span><br>
+                Mode de gestion : <span style="font-weight:bold;color: #0072F0">{mode_de_gestion}</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
+
     with col2:
         if abonnes != 0:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Nombre d'abonnés <br><br> 
-                    <span style="{style_scorecard}">{abonnes}</span><br>
+                    Nombre d'abonnés
+                    <span style="{style_scorecard}">{abonnes}</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -183,18 +195,19 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Nombre d'abonnés <br><br> 
-                   {info_missing}<br><br>
+                    Nombre d'abonnés<br>
+                    {info_missing}
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
+
     with col3:
         if prix != 0:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Prix ttc m3<br><br>
+                    Prix ttc m3<br>
                     <span style="{style_scorecard}">{prix} €</span>
                 </div>
                 """,
@@ -204,20 +217,25 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Prix ttc m3 <br><br> 
-                   {info_missing}<br><br>
+                    Prix ttc m3<br>
+                    {info_missing}
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-    st.text("")
-    col1, col2, col3 = st.columns([1, 1, 1], vertical_alignment="center")
+
+    # Add padding between rows
+    #    st.markdown('<div class="row-padding"></div>', unsafe_allow_html=True)
+
+    # Second row
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         if conso_moyenne != 0:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Consommation moyenne par foyer<br> <span style="{style_scorecard}">{conso_moyenne}</span>
+                    Consommation moyenne par foyer<br> 
+                    <span style="{style_scorecard}">{conso_moyenne}</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -226,19 +244,19 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Consommation moyenne par foyer<br> 
-                   {info_missing}<br><br>
+                    Consommation moyenne par foyer<br>
+                    {info_missing}
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-    with col2:
 
+    with col2:
         if facture_moyenne != 0:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Facture moyenne <br>annuelle <br> 
+                    Facture moyenne annuelle <br>
                     <span style="{style_scorecard}">{facture_moyenne} €</span><br>
                 </div>
                 """,
@@ -248,19 +266,20 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Facture moyenne <br>annuelle<br> 
-                   {info_missing}<br><br>
+                    Facture moyenne annuelle 
+                    {info_missing}
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
+
     with col3:
         if lineaire != 0:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Linéaire réseau <br><br> 
-                    <span style="{style_scorecard}">{lineaire} kms</span><br>
+                    Linéaire réseau <br>
+                    <span style="{style_scorecard}">{lineaire} kms</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -269,8 +288,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Linéaire réseau<br><br> 
-                   {info_missing}<br><br>
+                    Linéaire réseau<br> 
+                    {info_missing}
                 </div>
                 """,
                 unsafe_allow_html=True,
