@@ -5,6 +5,7 @@ from google.cloud import bigquery
 import os
 import plotly.express as px
 import plotly.graph_objects as go
+import random
 
 
 credentials = st.secrets["bigquery"]
@@ -18,6 +19,27 @@ with col2:
     st.image(image)
 
 st.header("Prix de l'eau - Suivi de votre commune")
+
+names = [
+    "Antoine",
+    "Alexandre",
+    "Adrien",
+    "Arthur",
+    "Aurélien",
+    "Alain",
+    "Armand",
+    "Achille",
+    "Anatole",
+    "Augustin",
+]
+selected_name = random.choice(names)
+
+st.markdown(
+    f"Projet mené par Agathe Dubly, Aurélie Gonter, Antoine Torné & Mehdi Bennis"
+)
+
+st.divider()
+st.subheader("Selection de la commune")
 
 file_path = os.path.join(os.path.dirname(__file__), "files/code_cities.csv")
 cities = pd.read_csv(file_path, sep=";")
