@@ -257,7 +257,7 @@ else:
                 f"""
                 <div class="custom-metric">
                     Facture moyenne annuelle <br>
-                    <span style="{style_scorecard}">{facture_moyenne} €</span><br>
+                    <span style="{style_scorecard}">{facture_moyenne} €</span>
                 </div>
                 """,
                 unsafe_allow_html=True,
