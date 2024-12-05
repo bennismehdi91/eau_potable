@@ -379,6 +379,13 @@ else:
             range=[min_scale, 102],
             overlaying="y",
         ),
+        legend=dict(
+            orientation="h",  # Horizontal legend
+            x=0.5,  # Center horizontally
+            y=-0.2,  # Position below the chart
+            xanchor="center",  # Align horizontally
+            yanchor="top",  # Align vertically
+        ),
     )
 
     st.plotly_chart(fig2)
