@@ -20,22 +20,8 @@ with col2:
 
 st.header("Prix de l'eau - Suivi de votre commune")
 
-names = [
-    "Antoine",
-    "Alexandre",
-    "Adrien",
-    "Arthur",
-    "Aurélien",
-    "Alain",
-    "Armand",
-    "Achille",
-    "Anatole",
-    "Augustin",
-]
-selected_name = random.choice(names)
-
 st.markdown(
-    f"Projet mené par Agathe Dubly, Aurélie Gonter, Antoine Torné & Mehdi Bennis"
+    f"Projet mené par Agathe Dubly,  Antoine Torné, Aurélie Gonter & Mehdi Bennis"
 )
 
 st.divider()
@@ -95,7 +81,7 @@ except Exception as e:
 
 name = cities["nom_commune_adherente"].iloc[0]
 
-st.subheader(f"Scorecard en 2022 : {name}")
+st.subheader(f"Indicateurs en 2022 : {name}")
 
 df_2022 = df[df["year"] == 2022]
 
@@ -153,7 +139,7 @@ else:
             background-color: #f9f9f9;
             border-radius: 5px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            min-height: 150px;
+            min-height: 175px;
             display: flex;
             justify-content: center;
             flex-direction: column;
@@ -173,8 +159,8 @@ else:
         st.markdown(
             f"""
             <div class="custom-metric" style="padding-bottom: 10px">
-                Nom de l'entité de gestion&nbsp;: <span style="font-weight:bold;color: #0072F0">{nom_entite}</span><br>
-                Mode de gestion : <span style="font-weight:bold;color: #0072F0">{mode_de_gestion}</span>
+                <p>Nom de l'entité de gestion&nbsp;: <span style="font-weight:bold;color: #0072F0">{nom_entite}</span></p>
+                <p>Mode de gestion : <span style="font-weight:bold;color: #0072F0">{mode_de_gestion}</span></p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -185,8 +171,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Nombre d'abonnés
-                    <span style="{style_scorecard}">{abonnes}</span>
+                    <p>Nombre d'abonnés</p>
+                    <p><span style="{style_scorecard}">{abonnes}</span></p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -195,8 +181,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Nombre d'abonnés<br>
-                    {info_missing}
+                    <p>Nombre d'abonnés</p>
+                    <p>{info_missing}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -207,8 +193,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Prix ttc m3<br>
-                    <span style="{style_scorecard}">{prix} €</span>
+                    <p>Prix ttc m<sup>3</sup></p>
+                    <p><span style="{style_scorecard}">{prix} €</span></p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -217,15 +203,12 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Prix ttc m3<br>
-                    {info_missing}
+                    <p>Prix ttc m<sup>3</sup></p>
+                    <p>{info_missing}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-
-    # Add padding between rows
-    #    st.markdown('<div class="row-padding"></div>', unsafe_allow_html=True)
 
     # Second row
     col1, col2, col3 = st.columns([1, 1, 1])
@@ -234,8 +217,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Consommation moyenne par foyer<br> 
-                    <span style="{style_scorecard}">{conso_moyenne}</span>
+                    <p>Consommation moyenne par foyer (m<sup>3</sup>)</p> 
+                    <p><span style="{style_scorecard}">{conso_moyenne}</span></p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -244,8 +227,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Consommation moyenne par foyer<br>
-                    {info_missing}
+                    <p>Consommation moyenne par foyer (m<sup>3</sup>)</p>
+                    <p>{info_missing}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -256,8 +239,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Facture moyenne annuelle <br>
-                    <span style="{style_scorecard}">{facture_moyenne} €</span>
+                    <p>Facture moyenne annuelle</p>
+                    <p><span style="{style_scorecard}">{facture_moyenne} €</span></p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -266,8 +249,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Facture moyenne annuelle 
-                    {info_missing}
+                    <p>Facture moyenne annuelle</p> 
+                    <p>{info_missing}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -278,8 +261,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Linéaire réseau <br>
-                    <span style="{style_scorecard}">{lineaire} kms</span>
+                    <p>Linéaire réseau </p>
+                    <p><span style="{style_scorecard}">{lineaire} kms</span></p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -288,8 +271,8 @@ else:
             st.markdown(
                 f"""
                 <div class="custom-metric">
-                    Linéaire réseau<br> 
-                    {info_missing}
+                    <p>Linéaire réseau</p> 
+                    <p>{info_missing}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -354,11 +337,24 @@ else:
         go.Scatter(
             x=tcd["year"],
             y=tcd["tx_conformite_physiochimiques"],
-            name="Physiochimiques",
+            name="Physico-chimique",
             yaxis="y2",
             line=dict(color="#F06292"),
         )
     )
+
+    # Add second trace
+    fig2.add_trace(
+        go.Scatter(
+            x=[2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
+            y=[99, 99, 99, 99, 99, 99, 99, 99],
+            name="Taux acceptable",
+            yaxis="y2",
+            mode="lines",
+            line=dict(color="#000", dash="dot"),
+        )
+    )
+    # RAJOTUER UNE LIGNE BENCHMARK
 
     min_micro = tcd["tx_conformite_microbiologie"].min()
     min_physio = tcd["tx_conformite_physiochimiques"].min()
@@ -369,14 +365,14 @@ else:
 
     # Define y-axes
     fig2.update_layout(
-        title="Microbiologie vs Physiochimiques",
+        title="Conformités Microbiologie & Physico-chimique",
         xaxis=dict(title="Années"),
         yaxis=dict(
-            title="Microbiologie & Physiochimiques",
-            range=[min_scale, 102],
+            title="Microbiologie & Physico-chimique",
+            range=[min_scale, 100.5],
         ),
         yaxis2=dict(
-            range=[min_scale, 102],
+            range=[min_scale, 100.5],
             overlaying="y",
         ),
         legend=dict(
@@ -394,16 +390,112 @@ else:
         tcd,
         x="year",
         y="ipl_note",
-        title="Indice de Perte Linéaire",
+        title="Note pondérée de Perte d'Eau",
         text="ipl_note",
     )
 
     fig3.update_traces(textposition="top center", line=dict(color="#0072F0"))
     fig3.update_layout(
-        yaxis_range=[tcd["ipl_note"].min() - 0.5, tcd["ipl_note"].max() + 0.5],
+        yaxis_range=[0.5, 4.5],
         yaxis_title="Indice de Perte Linéaire (fuites)",
         xaxis_title="Année",
         xaxis=dict(showgrid=False),
         yaxis=dict(showgrid=False),
     )
+    # RAJOTUER LES 4 COULEURS SUR LE CHART : 0-1 PAS BIEN, 3-4 SUPER
+
+    fig3.add_shape(
+        type="rect",
+        x0=tcd["year"].min(),
+        x1=tcd["year"].max(),
+        y0=0.5,
+        y1=1.5,
+        fillcolor="red",
+        opacity=0.2,
+        line_width=0,
+    )
+    fig3.add_shape(
+        type="rect",
+        x0=tcd["year"].min(),
+        x1=tcd["year"].max(),
+        y0=1.5,
+        y1=2.5,
+        fillcolor="orange",
+        opacity=0.2,
+        line_width=0,
+    )
+    fig3.add_shape(
+        type="rect",
+        x0=tcd["year"].min(),
+        x1=tcd["year"].max(),
+        y0=2.5,
+        y1=3.5,
+        fillcolor="green",
+        opacity=0.2,
+        line_width=0,
+    )
+    fig3.add_shape(
+        type="rect",
+        x0=tcd["year"].min(),
+        x1=tcd["year"].max(),
+        y0=3.5,
+        y1=4.5,
+        fillcolor="green",
+        opacity=0.3,
+        line_width=0,
+    )
+
+    fig3.add_annotation(
+        x=2015,  # Position on the far-right
+        y=3.7,  # Position for green
+        text="<b>Bien</b>",
+        showarrow=False,
+        font=dict(size=12, color="#fff"),
+        xanchor="left",
+        bgcolor="green",
+        opacity=1,
+    )
+
+    fig3.add_annotation(
+        x=2015,  # Position on the far-right
+        y=2.7,  # Position for lighter green
+        text="<b>Acceptable</b>",
+        showarrow=False,
+        font=dict(size=12, color="#000"),
+        xanchor="left",
+        bgcolor="#B2D9B2",
+        opacity=1,
+    )
+
+    fig3.add_annotation(
+        x=2015,  # Position on the far-right
+        y=1.7,  # Position for orange
+        text="<b>Mediocre</b>",
+        showarrow=False,
+        font=dict(size=12, color="#000"),
+        xanchor="left",
+        bgcolor="orange",
+        opacity=1,
+    )
+
+    fig3.add_annotation(
+        x=2015,  # Position on the far-right
+        y=0.7,  # Position for red
+        text="<b>Mauvais</b>",
+        showarrow=False,
+        font=dict(size=12, color="#fff"),
+        xanchor="left",
+        bgcolor="red",
+        opacity=1,
+    )
+
+    # Ensure the plot layout still works as intended
+    fig3.update_layout(
+        yaxis_range=[0.5, 4.5],  # Adjust the y-axis to fit the legend
+        yaxis_title="Note pondérée de Perte d'Eau",
+        xaxis_title="Année",
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=False),
+    )
+
     st.plotly_chart(fig3)
