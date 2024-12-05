@@ -5,8 +5,6 @@ from google.cloud import bigquery
 import os
 import plotly.express as px
 import plotly.graph_objects as go
-import random
-
 
 credentials = st.secrets["bigquery"]
 client = bigquery.Client.from_service_account_info(credentials)
@@ -159,7 +157,7 @@ else:
         st.markdown(
             f"""
             <div class="custom-metric" style="padding-bottom: 10px">
-                <p>Nom de l'entité de gestion&nbsp;: <span style="font-weight:bold;color: #0072F0">{nom_entite}</span></p>
+                <p>Nom du service&nbsp;: <span style="font-weight:bold;color: #0072F0">{nom_entite}</span></p>
                 <p>Mode de gestion : <span style="font-weight:bold;color: #0072F0">{mode_de_gestion}</span></p>
             </div>
             """,
